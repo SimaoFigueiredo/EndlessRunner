@@ -8,6 +8,8 @@ public class PlayerMovement : MonoBehaviour
     public float laneDistance = 3f; // A distância entre cada faixa
     private int desiredLane = 1; // Começamos no meio (0 = Esquerda, 1 = Meio, 2 = Direita)
 
+    public float jumpForce = 7f;
+
     void Update()
     {
         // Se carregar na seta Direita ou no 'D'
@@ -24,6 +26,11 @@ public class PlayerMovement : MonoBehaviour
             desiredLane--; // Diminui o número da faixa
             if (desiredLane == -1) // Se tentar ir além da faixa da esquerda
                 desiredLane = 0;   // obriga-o a ficar na esquerda.
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            Jump();
         }
     }
 
@@ -50,5 +57,14 @@ public class PlayerMovement : MonoBehaviour
 
         // 4. Mover o boneco de vez!
         rb.MovePosition(newPosition);
+    }
+
+    void Jump()
+    {
+        if (Physics.Raycast(transform.position, Vector3.down, 1.1f))
+        {
+            // Dá um "pontapé" na física do boneco para cima
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
     }
 }
