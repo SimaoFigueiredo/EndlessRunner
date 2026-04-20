@@ -2,16 +2,26 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float speed = 5f;
-    public Rigidbody rb;
-    
-    public float laneDistance = 3f; // A distância entre cada faixa
-    private int desiredLane = 1; // Começamos no meio (0 = Esquerda, 1 = Meio, 2 = Direita)
+    [Header("Configurações de Velocidade")]
+    public float speed = 5f;             // Velocidade inicial
+    public float aceleracao = 0.1f;      // Quanto a velocidade aumenta por segundo
+    public float velocidadeMaxima = 40f; // O limite para não ficar impossível
 
+    [Header("Movimento e Saltos")]
+    public Rigidbody rb;
+    public float laneDistance = 3f; // A distância entre cada faixa
+    private int desiredLane = 1;    // Começamos no meio (0 = Esquerda, 1 = Meio, 2 = Direita)
     public float jumpForce = 7f;
 
     void Update()
     {
+        if (speed < velocidadeMaxima)
+        {
+            // Aumenta a velocidade aos poucos a cada frame
+            speed += aceleracao * Time.deltaTime;
+        }
+
+
         // Se carregar na seta Direita ou no 'D'
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
         {
@@ -45,7 +55,7 @@ public class PlayerMovement : MonoBehaviour
         else if (desiredLane == 2)
             targetX = laneDistance;
 
-        // 2. Calcular o movimento para a frente (como já tínhamos)
+        // 2. Calcular o movimento para a frente (Usa a nossa 'speed' que agora está a crescer)
         Vector3 forwardMove = transform.forward * speed * Time.fixedDeltaTime;
 
         // 3. Juntar a posição lateral suave com o movimento para a frente
@@ -55,7 +65,7 @@ public class PlayerMovement : MonoBehaviour
             rb.position.z + forwardMove.z
         );
 
-        // 4. Mover o boneco de vez!
+        // 4. Mover o boneco de vez
         rb.MovePosition(newPosition);
     }
 
@@ -63,7 +73,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Physics.Raycast(transform.position, Vector3.down, 1.1f))
         {
-            // Dá um "pontapé" na física do boneco para cima
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
     }
