@@ -17,8 +17,12 @@ public class Coin : MonoBehaviour
         if (!jaFoiApanhada && (other.CompareTag("Player") || other.gameObject.name == "Player"))
         {
             jaFoiApanhada = true;
-            Debug.Log("Moeda Apanhada!"); // Vamos imprimir isto na consola só para ter a certeza
-            Destroy(gameObject);
+            
+            ScoreManager scoreManager = FindObjectOfType<ScoreManager>();
+            if (scoreManager != null)
+            {
+                scoreManager.ApanhouMoeda();
+            }            Destroy(gameObject);
         }
     }
 
