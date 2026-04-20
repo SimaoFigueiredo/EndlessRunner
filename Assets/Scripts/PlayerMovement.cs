@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
                 desiredLane = 0;   // obriga-o a ficar na esquerda.
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
         {
             Jump();
         }
