@@ -22,6 +22,10 @@ public class MenuManager : MonoBehaviour
         scoreText.text = "Distância: " + finalDistance + "m";
         coinsText.text = "Moedas: " + finalCoins;
 
+        int moedasAntigas = PlayerPrefs.GetInt("TotalCoins", 0); // Vê quanto tinhas
+        PlayerPrefs.SetInt("TotalCoins", moedasAntigas + finalCoins); // Soma as novas
+        PlayerPrefs.Save(); // Guarda no disco!
+
         // Vai procurar a gaveta chamada "HighScore". Se não existir, o valor é 0.
         int savedHighScore = PlayerPrefs.GetInt("HighScore", 0); 
 
@@ -47,7 +51,7 @@ public class MenuManager : MonoBehaviour
 
     public void GoToMainMenu()
     {
-        // Por agora, apenas escreve na consola, porque ainda não existe a cena do Menu Principal
-        Debug.Log("A carregar o Menu Principal...");
+        SceneManager.LoadScene(0); 
     }
+    
 }
