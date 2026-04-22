@@ -1134,10 +1134,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12730066e39f6824bb4f38440494cdb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  speed: 8
+  speed: 10
+  aceleracao: 0.3
+  velocidadeMaxima: 65
   rb: {fileID: 1713883707}
   laneDistance: 3
-  jumpForce: 7
+  jumpForce: 11
+  gravidadeExtra: 20
 --- !u!54 &1713883707
 Rigidbody:
   m_ObjectHideFlags: 0

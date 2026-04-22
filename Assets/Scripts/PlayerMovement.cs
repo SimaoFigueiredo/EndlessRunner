@@ -3,15 +3,16 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Configurações de Velocidade")]
-    public float speed = 5f;             // Velocidade inicial
-    public float aceleracao = 0.1f;      // Quanto a velocidade aumenta por segundo
-    public float velocidadeMaxima = 40f; // O limite para não ficar impossível
+    public float speed = 10f;             // Velocidade inicial
+    public float aceleracao = 0.3f;      // Quanto a velocidade aumenta por segundo
+    public float velocidadeMaxima = 65f; // O limite para não ficar impossível
 
     [Header("Movimento e Saltos")]
     public Rigidbody rb;
     public float laneDistance = 3f; // A distância entre cada faixa
     private int desiredLane = 1;    // Começamos no meio (0 = Esquerda, 1 = Meio, 2 = Direita)
-    public float jumpForce = 7f;
+    public float jumpForce = 11f;
+    public float gravidadeExtra = 20f;
 
     void Update()
     {
@@ -67,6 +68,9 @@ public class PlayerMovement : MonoBehaviour
 
         // 4. Mover o boneco de vez
         rb.MovePosition(newPosition);
+
+        // 5. Puxa o boneco para baixo para o salto ser rápido e não flutuar 
+        rb.AddForce(Vector3.down * gravidadeExtra, ForceMode.Acceleration);
     }
 
     void Jump()

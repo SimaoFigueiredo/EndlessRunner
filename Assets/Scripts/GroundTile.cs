@@ -6,7 +6,8 @@ public class GroundTile : MonoBehaviour
 
     [Header("Spawns")]
     public GameObject coinPrefab;
-    public Transform[] coinSpawnPoints;
+    public GameObject[] obstaclePrefabs; 
+    public Transform[] spawnPoints;
     
     public bool podeCriarMoedas = true; 
 
@@ -16,7 +17,7 @@ public class GroundTile : MonoBehaviour
 
         if (podeCriarMoedas)
         {
-            SpawnCoins();
+            SpawnElementos();
         }
     }
 
@@ -29,25 +30,83 @@ public class GroundTile : MonoBehaviour
         }
     }
 
-    void SpawnCoins()
+    void SpawnElementos()
     {
-        // 1. Lança o dado: Este bloco de chão vai ter moedas? 
-        if (Random.Range(0, 100) < 75) // 75% de chance de ter moedas
-        {
-            // 2. Escolhe APENAS UMA faixa ao calhas (0 = Esquerda, 1 = Centro, 2 = Direita)
-            int faixaEscolhida = Random.Range(0, coinSpawnPoints.Length);
-            Transform pontoBase = coinSpawnPoints[faixaEscolhida];
+        // 1. ESCOLHER A FAIXA SEGURA (A que o jogador tem de usar para sobreviver)
+        int faixaSegura = Random.Range(0, spawnPoints.Length);
 
-            // 3. Define quantas moedas vão formar o corredor
+        // % de chance da faixa segura ter uma barreira baixinha
+        bool saltoObrigatorio = Random.Range(0, 100) < 60;
+
+        // 2. ESCOLHER ONDE FICAM AS MOEDAS (Para guiar o jogador para a segurança)
+        // % de chance de haver moedas na faixa segura
+        if (Random.Range(0, 100) < 90) 
+        {
+            Transform pontoMoedas = spawnPoints[faixaSegura];
             int moedasNaFila = 5;
 
-            // 4. Cria a fila de moedas a ir para a frente
             for (int i = 0; i < moedasNaFila; i++)
             {
-                // Adicionamos '-2f' para a fila começar 2 metros mais cedo no bloco
-                Vector3 posicaoMoeda = pontoBase.position + new Vector3(0, 0, (i * 2.5f) - 2f);
+                float alturaExtra = 0f;
 
+                // Se houver barreira, desenhamos um arco com as moedas!
+                if (saltoObrigatorio)
+                {
+                    if (i == 0) alturaExtra = 0f;       // Chão
+                    else if (i == 1) alturaExtra = 1.2f; // A subir
+                    else if (i == 2) alturaExtra = 1.8f; // Ponto mais alto (por cima da barreira)
+                    else if (i == 3) alturaExtra = 1.2f; // A descer
+                    else if (i == 4) alturaExtra = 0f;   // Chão
+                }
+
+                // Adicionamos a alturaExtra no eixo Y
+                Vector3 posicaoMoeda = pontoMoedas.position + new Vector3(0, alturaExtra, (i * 2.5f) - 2f);
                 Instantiate(coinPrefab, posicaoMoeda, Quaternion.identity);
+            }
+        }
+
+        // 3. ESCOLHER ONDE FICA O PERIGO (Nas faixas que sobram)
+        for (int i = 0; i < spawnPoints.Length; i++)
+        {
+            // Se estivermos a olhar para a faixa segura:
+            if (i == faixaSegura) 
+            {
+                // Se calhou o salto obrigatório, pomos a barreira baixinha
+                if (saltoObrigatorio)
+                {
+                    Transform pontoObstaculo = spawnPoints[i];
+                    
+                    // Força o Y a ser exatamente o nível do chão
+                    Vector3 posicaoChao = new Vector3(pontoObstaculo.position.x, transform.position.y, pontoObstaculo.position.z);
+                    
+                    GameObject novoObstaculo = Instantiate(obstaclePrefabs[1], posicaoChao, Quaternion.identity);
+                    
+                    // Calcula a altura real e cola os pés ao chão
+                    float altura = novoObstaculo.GetComponent<Collider>().bounds.size.y;
+                    novoObstaculo.transform.position += new Vector3(0, altura / 2f, 0);
+                }
+                
+                // Ignoramos o resto (não pomos paredes grandes na faixa segura)
+                continue;
+            }
+
+            // % de chance de haver um obstáculo nesta faixa específica
+            if (Random.Range(0, 100) < 85) 
+            {
+                Transform pontoObstaculo = spawnPoints[i];
+                
+                // Sorteia entre a Parede (0) e o Salto (1)
+                int tipoObstaculo = Random.Range(0, obstaclePrefabs.Length);
+                
+                // Força o Y a ser exatamente o nível do chão
+                Vector3 posicaoChao = new Vector3(pontoObstaculo.position.x, transform.position.y, pontoObstaculo.position.z);
+                
+                // Faz nascer o obstáculo
+                GameObject novoObstaculo = Instantiate(obstaclePrefabs[tipoObstaculo], posicaoChao, Quaternion.identity);
+                
+                // Calcula a altura real e cola os pés ao chão
+                float altura = novoObstaculo.GetComponent<Collider>().bounds.size.y;
+                novoObstaculo.transform.position += new Vector3(0, altura / 2f, 0);
             }
         }
     }
