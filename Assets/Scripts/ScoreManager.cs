@@ -4,7 +4,7 @@ using TMPro;
 public class ScoreManager : MonoBehaviour
 {
     public TextMeshProUGUI textoPontuacao;
-    private int totalMoedas = 0;
+    public int totalMoedas = 0;
 
     void Start()
     {
