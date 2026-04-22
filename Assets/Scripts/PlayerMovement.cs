@@ -4,7 +4,7 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("Configurações de Velocidade")]
     public float speed = 10f;             // Velocidade inicial
-    public float aceleracao = 0.3f;      // Quanto a velocidade aumenta por segundo
+    public float aceleracao = 0.2f;      // Quanto a velocidade aumenta por segundo
     public float velocidadeMaxima = 65f; // O limite para não ficar impossível
 
     [Header("Movimento e Saltos")]
@@ -95,22 +95,31 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void Morrer()
-    {
-        estaMorto = true;
+{
+    if (estaMorto) return;
+    estaMorto = true;
 
-        // 1. Pára o movimento lógico
-        speed = 0f;
-        aceleracao = 0f;
-        enabled = false; 
-        
-        // 2. Mata a inércia da Física (Tira o "ressalto" e o voo)
-        rb.linearVelocity = Vector3.zero; 
-        
-        // 3. Puxa-o para o chão
-        rb.AddForce(Vector3.down * 50f, ForceMode.Impulse);
+    // 1. Parar o movimento
+    speed = 0f;
+    aceleracao = 0f;
+    enabled = false; 
+    rb.linearVelocity = Vector3.zero; 
+    rb.AddForce(Vector3.down * 50f, ForceMode.Impulse);
 
-        Debug.Log("BATEMOS NUMA CAIXA! GAME OVER!");
+    // 2. RECOLHER OS DADOS REAIS
+    // Calculamos a distância percorrida (Z) e arredondamos para um número inteiro
+    int finalDistance = Mathf.FloorToInt(transform.position.z);
 
-        FindObjectOfType<MenuManager>().MostrarGameOver();
+    // Vamos buscar o ScoreManager que está na cena para saber as moedas
+    int finalCoins = 0;
+    ScoreManager sm = FindObjectOfType<ScoreManager>();
+    if (sm != null) {
+        finalCoins = sm.totalMoedas;
     }
+
+    // 3. ENVIAR PARA O MENU
+    FindObjectOfType<MenuManager>().ShowGameOver(finalDistance, finalCoins);
+
+    Debug.Log("GAME OVER! Distância: " + finalDistance + " Moedas: " + finalCoins);
+}
 }
