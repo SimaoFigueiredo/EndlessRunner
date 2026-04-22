@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     private int desiredLane = 1;    // Começamos no meio (0 = Esquerda, 1 = Meio, 2 = Direita)
     public float jumpForce = 11f;
     public float gravidadeExtra = 20f;
+    private bool estaMorto = false;
 
     void Update()
     {
@@ -79,5 +80,35 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
+    }
+
+    //SISTEMA DE COLISÃO
+    private void OnCollisionEnter(Collision collision)
+    {
+        // Se já estivermos mortos, o código para aqui e ignora os ricochetes!
+        if (estaMorto) return; 
+
+        if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            Morrer();
+        }
+    }
+
+    void Morrer()
+    {
+        estaMorto = true;
+
+        // 1. Pára o movimento lógico
+        speed = 0f;
+        aceleracao = 0f;
+        enabled = false; 
+        
+        // 2. Mata a inércia da Física (Tira o "ressalto" e o voo)
+        rb.linearVelocity = Vector3.zero; 
+        
+        // 3. Puxa-o para o chão
+        rb.AddForce(Vector3.down * 50f, ForceMode.Impulse);
+
+        Debug.Log("BATEMOS NUMA CAIXA! GAME OVER!");
     }
 }
