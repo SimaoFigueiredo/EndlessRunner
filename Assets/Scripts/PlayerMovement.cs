@@ -110,5 +110,7 @@ public class PlayerMovement : MonoBehaviour
         rb.AddForce(Vector3.down * 50f, ForceMode.Impulse);
 
         Debug.Log("BATEMOS NUMA CAIXA! GAME OVER!");
+
+        FindObjectOfType<MenuManager>().MostrarGameOver();
     }
 }
