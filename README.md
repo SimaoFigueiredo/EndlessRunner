@@ -1,48 +1,62 @@
-# 🏃‍♂️ Projeto: Endless Runner(TM)
-Este projeto está a ser desenvolvido por Simão Figueiredo e André Bacelo no ambito da disciplina de tecnologias e multimédia.
+# Projeto Endless Runner - Tecnologias Multimédia
+
+Trabalho Prático 1 desenvolvido no âmbito da disciplina de Tecnologias Multimédia (2025/2026).
+
+## Equipa de Desenvolvimento
+* **André Bacelo** - Número: 33200
+* **Simão Figueiredo** - Número: 33401
 
 ---
 
-## 🚀 Estado do Projeto
-Atualmente em: **Desenvolvimento Inicial (Etapa 1)**
-> Estado: A implementar a movimentação básica da personagem.
+## Detalhes Técnicos
+* **Motor de Jogo:** Unity
+* **Versão do Unity:** 6000.3.11f1
+* **Linguagem:** C#
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
-* **Motor de Jogo:** Unity / C#
-* **Controlo de Versões:** Git & GitHub
-* **Gestão de Tarefas:** GitHub Projects (Quadro Kanban)
+## Descrição do Jogo e Funcionalidades
+O jogo desenvolvido enquadra-se no tema "Endless Runner". O jogador controla uma personagem que se desloca continuamente para a frente num cenário gerado de forma infinita. 
+
+**Funcionalidades Implementadas:**
+* **Movimento Baseado em Física:** Utilização de `Rigidbody` e forças para o controlo de saltos e gravidade melhorada.
+* **Geração Procedural:** O chão (tiles), os obstáculos e as moedas são instanciados e destruídos dinamicamente para otimizar a memória.
+* **Dificuldade Incremental:** A velocidade do jogo aumenta progressivamente ao longo do tempo.
+* **Algoritmo de Rota Segura:** O sistema garante que existe sempre um caminho possível (Safe Lane) para o jogador não ficar encurralado.
+* **Interface e Persistência (UI):** Menus dinâmicos, contagem de moedas, distância percorrida e gravação permanente do "High Score" usando `PlayerPrefs`.
+* **Múltiplas Cenas:** Gestão de transições entre o Menu Principal e a Cena de Jogo via `SceneManager`.
 
 ---
 
-## 📋 Funcionalidades Planeadas
+## Jogabilidade e Controlos
+**Objetivo:** Sobreviver o máximo de tempo possível, evitando bater nos obstáculos vermelhos, e apanhar o maior número de moedas para bater o recorde pessoal de distância!
 
-### Etapa 1: Mecânicas Base 🟢
-- [x] Movimento constante para a frente.
-- [ ] Troca de faixas (Lanes) com suavização.
-- [ ] Salto e deteção de colisão com o chão.
+**Controlos:**
+* `A` ou `Seta Esquerda` - Mudar para a faixa da esquerda.
+* `D` ou `Seta Direita` - Mudar para a faixa da direita.
+* `Espaço` ou `W` ou `Seta Cima` - Saltar por cima das barreiras baixas.
 
-### Etapa 2: Geração do Mundo 🟡
-- [ ] Criação automática de blocos de cenário (Tiles).
-- [ ] Sistema de "Object Pooling" para melhor desempenho.
-- [ ] Eliminação de objetos que ficam para trás.
-
-### Etapa 3: Desafios e Interface 🔴
-- [ ] Obstáculos fixos e móveis.
-- [ ] Sistema de pontuação baseado na distância percorrida.
-- [ ] Ecrã de "Fim de Jogo" (Game Over) e Reinício.
+**Regras:**
+* Tocar num obstáculo (caixotes ou barreiras) resulta em Game Over imediato.
+* Bater o recorde atual guarda automaticamente a nova pontuação no sistema.
 
 ---
 
-## 🎮 Como Jogar (Em breve)
-1. Faz o "Clone" do repositório.
-2. Abre o projeto no teu motor de jogo.
-3. Utiliza as teclas `A` e `D` ou as `Setas` para mudar de faixa.
+## Como abrir e correr o projeto
+1. Faz o **Clone** ou descarrega este repositório para o teu computador.
+2. Abre o **Unity Hub**.
+3. Clica em `Add` e seleciona a pasta raiz deste repositório.
+4. Abre o projeto (garante que tens a versão 6000.3.11f1 instalada).
+5. Na aba *Project* em baixo, navega até `Assets/Scenes`.
+6. Clica duas vezes na cena **`MainMenu`**.
+7. Clica no botão **Play** (▶) no topo do ecrã para iniciar o jogo.
 
 ---
 
-## 📂 Estrutura de Pastas
-* `/Assets/Scripts`: Lógica de programação em C#.
-* `/Assets/Prefabs`: Objetos reutilizáveis (Jogador, Cenários, Obstáculos).
-* `/Assets/Scenes`: Níveis e Menus do jogo.
+## Assets Multimédia
+
+**Modelos 3D e Texturas:**
+
+**Áudio (SFX e Música):**
+
+---
