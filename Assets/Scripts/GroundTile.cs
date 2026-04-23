@@ -97,7 +97,7 @@ public class GroundTile : MonoBehaviour
             }
 
             // % de chance de haver um obstáculo nesta faixa específica
-            if (Random.Range(0, 100) < 85) 
+            if (Random.Range(0, 100) < 95) 
             {
                 Transform pontoObstaculo = spawnPoints[i];
                 
