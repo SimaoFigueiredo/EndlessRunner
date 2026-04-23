@@ -8,6 +8,10 @@ public class GroundTile : MonoBehaviour
     public GameObject coinPrefab;
     public GameObject[] obstaclePrefabs; 
     public Transform[] spawnPoints;
+
+    public GameObject estrelaPrefab; // Arrastas a estrela para aqui no Unity   
+    [Range(0, 100)] 
+    public float chanceDeEstrela = 10f; // 10% de hipótese de aparecer
     
     public bool podeCriarMoedas = true; 
 
@@ -18,6 +22,8 @@ public class GroundTile : MonoBehaviour
         if (podeCriarMoedas)
         {
             SpawnElementos();
+            
+            SpawnEstrela(); 
         }
     }
 
@@ -109,5 +115,23 @@ public class GroundTile : MonoBehaviour
                 novoObstaculo.transform.position += new Vector3(0, altura / 2f, 0);
             }
         }
+    }
+
+    // ==========================================================
+    // 2. ADICIONADO: A função que cria a estrela aleatoriamente
+    // ==========================================================
+    void SpawnEstrela()
+    {
+        // 1. Escolhe uma faixa à sorte (0, 1 ou 2)
+        int pontoAleatorio = Random.Range(0, spawnPoints.Length);
+        Transform pontoEscolhido = spawnPoints[pontoAleatorio];
+
+        // 2. FORÇAMOS a estrela a nascer sempre! (Ignoramos a chanceDeEstrela por agora)
+        // Pus a altura a 2f para termos a certeza absoluta que ela não fica enterrada debaixo do chão!
+        Vector3 posicaoEstrela = pontoEscolhido.position + new Vector3(0, 2f, 0);
+        Instantiate(estrelaPrefab, posicaoEstrela, Quaternion.identity, transform);
+
+        // 3. Mandamos o Unity gritar na consola sempre que criar uma estrela
+        Debug.Log("ESTRELA FORÇADA A NASCER NA FAIXA: " + pontoAleatorio);
     }
 }

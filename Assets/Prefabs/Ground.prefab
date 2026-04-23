@@ -277,6 +277,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  estrelaPrefab: {fileID: 0}
+  chanceDeEstrela: 10
   podeCriarMoedas: 1
 --- !u!1 &6596856246822224471
 GameObject:
@@ -462,6 +464,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  estrelaPrefab: {fileID: 0}
+  chanceDeEstrela: 10
   podeCriarMoedas: 1
 --- !u!1 &7971188376571569582
 GameObject:
@@ -656,6 +660,8 @@ MonoBehaviour:
   - {fileID: 6407775800561740898}
   - {fileID: 6290898208008252520}
   - {fileID: 6038972362125512421}
+  estrelaPrefab: {fileID: 7331960070785106472, guid: b6ce24362c3abaf44bd7dc53fceb0a20, type: 3}
+  chanceDeEstrela: 100
   podeCriarMoedas: 1
 --- !u!1001 &2216949996077325
 PrefabInstance:

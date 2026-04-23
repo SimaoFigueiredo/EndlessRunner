@@ -1,8 +1,14 @@
 using System.Reflection;
 using UnityEngine;
+using System.Collections; // <-- Adicionado apenas isto aqui em cima para o cronómetro funcionar
 
 public class PlayerMovement : MonoBehaviour
-{
+{   
+    [Header("Poder da Estrela")]
+    public float velocidadeExtra = 2f; // Multiplica a velocidade por 2
+    public float tempoDoPoder = 5f;    // O turbo dura 5 segundos
+    private float velocidadeOriginal;  // Guarda a velocidade normal para voltar ao que era
+    
     [Header("Configurações de Velocidade")]
     public float speed = 10f;             // Velocidade inicial
     public float aceleracao = 0.2f;      // Quanto a velocidade aumenta por segundo
@@ -26,7 +32,6 @@ public class PlayerMovement : MonoBehaviour
             // Aumenta a velocidade aos poucos a cada frame
             speed += aceleracao * Time.deltaTime;
         }
-
 
         // Se carregar na seta Direita ou no 'D'
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
@@ -100,31 +105,60 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void Morrer()
-{
-    if (estaMorto) return;
-    estaMorto = true;
-    anim.SetTrigger("Morrer");
-    // 1. Parar o movimento
-    speed = 0f;
-    aceleracao = 0f;
-    enabled = false; 
-    rb.linearVelocity = Vector3.zero; 
-    rb.AddForce(Vector3.down * 50f, ForceMode.Impulse);
+    {
+        if (estaMorto) return;
+        estaMorto = true;
+        anim.SetTrigger("Morrer");
+        // 1. Parar o movimento
+        speed = 0f;
+        aceleracao = 0f;
+        enabled = false; 
+        rb.linearVelocity = Vector3.zero; 
+        rb.AddForce(Vector3.down * 50f, ForceMode.Impulse);
 
-    // 2. RECOLHER OS DADOS REAIS
-    // Calculamos a distância percorrida (Z) e arredondamos para um número inteiro
-    int finalDistance = Mathf.FloorToInt(transform.position.z);
+        // 2. RECOLHER OS DADOS REAIS
+        // Calculamos a distância percorrida (Z) e arredondamos para um número inteiro
+        int finalDistance = Mathf.FloorToInt(transform.position.z);
 
-    // Vamos buscar o ScoreManager que está na cena para saber as moedas
-    int finalCoins = 0;
-    ScoreManager sm = FindObjectOfType<ScoreManager>();
-    if (sm != null) {
-        finalCoins = sm.totalMoedas;
+        // Vamos buscar o ScoreManager que está na cena para saber as moedas
+        int finalCoins = 0;
+        ScoreManager sm = FindObjectOfType<ScoreManager>();
+        if (sm != null) {
+            finalCoins = sm.totalMoedas;
+        }
+
+        // 3. ENVIAR PARA O MENU
+        FindObjectOfType<MenuManager>().ShowGameOver(finalDistance, finalCoins);
+
+        Debug.Log("GAME OVER! Distância: " + finalDistance + " Moedas: " + finalCoins);
     }
 
-    // 3. ENVIAR PARA O MENU
-    FindObjectOfType<MenuManager>().ShowGameOver(finalDistance, finalCoins);
+    // ==========================================================
+    // SÓ ADICIONADO ISTO AQUI EM BAIXO PARA A ESTRELA FUNCIONAR:
+    // ==========================================================
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (estaMorto) return;
 
-    Debug.Log("GAME OVER! Distância: " + finalDistance + " Moedas: " + finalCoins);
-}
+        // Se batermos na Estrela...
+        if (other.gameObject.CompareTag("Estrela"))
+        {
+            Destroy(other.gameObject); // A estrela desaparece
+            StartCoroutine(PoderDeVelocidade()); // Ativa o turbo!
+        }
+    }
+
+    IEnumerator PoderDeVelocidade()
+    {
+        velocidadeOriginal = speed; // Guarda a velocidade atual
+        speed *= velocidadeExtra;   // Acelera!
+        
+        yield return new WaitForSeconds(tempoDoPoder); // Espera 5 segundos
+        
+        if (!estaMorto) 
+        {
+            speed = velocidadeOriginal; // Volta ao normal
+        }
+    }
 }
