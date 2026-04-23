@@ -1,3 +1,4 @@
+using System.Reflection;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -14,6 +15,9 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce = 11f;
     public float gravidadeExtra = 20f;
     private bool estaMorto = false;
+
+    [Header("Animações")]
+    public Animator anim;
 
     void Update()
     {
@@ -79,6 +83,7 @@ public class PlayerMovement : MonoBehaviour
         if (Physics.Raycast(transform.position, Vector3.down, 1.1f))
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            anim.SetTrigger("Saltar");
         }
     }
 
@@ -98,7 +103,7 @@ public class PlayerMovement : MonoBehaviour
 {
     if (estaMorto) return;
     estaMorto = true;
-
+    anim.SetTrigger("Morrer");
     // 1. Parar o movimento
     speed = 0f;
     aceleracao = 0f;

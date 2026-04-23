@@ -26,7 +26,7 @@ public class GroundTile : MonoBehaviour
         if (other.CompareTag("Player") || other.gameObject.name == "Player")
         {
             groundSpawner.SpawnTile();
-            Destroy(gameObject, 2f);
+            Destroy(gameObject, 3f);
         }
     }
 
