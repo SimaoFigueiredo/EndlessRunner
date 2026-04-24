@@ -200,18 +200,14 @@ public class PlayerMovement : MonoBehaviour
 
     IEnumerator PoderDeVelocidade()
     {
-        // 4. Em vez de multiplicar a velocidade atual, usamos sempre a base
-        // Assim, mesmo que apanhes 10 estrelas seguidas, a velocidade nunca passa deste limite.
-        speed = velocidadeBase * velocidadeExtra;   
+        float bonusDeVelocidade = speed; 
         
-        yield return new WaitForSeconds(tempoDoPoder); // Espera o tempo
-        
-        if (!estaMorto) 
-        {
-            speed = velocidadeBase; // Volta ao normal de forma 100% segura
-        }
+        speed += bonusDeVelocidade; 
 
-        // Limpa a memória de que o boost estava ativo
+        yield return new WaitForSeconds(tempoDoPoder);
+
+        speed -= bonusDeVelocidade;
+        
         rotinaDeBoostAtual = null; 
     }
 }
