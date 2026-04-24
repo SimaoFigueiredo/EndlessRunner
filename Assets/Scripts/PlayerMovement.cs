@@ -1,7 +1,17 @@
+using System.Reflection;
 using UnityEngine;
+using System.Collections; // <-- Adicionado apenas isto aqui em cima para o cronómetro funcionar
 
 public class PlayerMovement : MonoBehaviour
-{
+{  
+    [Header("Poder da Estrela")]
+    public float velocidadeExtra = 2f; // Multiplica a velocidade por 2
+    public float tempoDoPoder = 5f;    // O turbo dura 5 segundos
+    public float velocidadeBase = 10f; 
+
+    // A variável que impede as estrelas de se atropelarem
+    private Coroutine rotinaDeBoostAtual;
+    
     [Header("Configurações de Velocidade")]
     public float speed = 10f;             // Velocidade inicial
     public float aceleracao = 0.2f;      // Quanto a velocidade aumenta por segundo
@@ -15,6 +25,9 @@ public class PlayerMovement : MonoBehaviour
     public float gravidadeExtra = 20f;
     private bool estaMorto = false;
 
+    [Header("Animações")]
+    public Animator anim;
+
     void Update()
     {
         if (speed < velocidadeMaxima)
@@ -22,7 +35,6 @@ public class PlayerMovement : MonoBehaviour
             // Aumenta a velocidade aos poucos a cada frame
             speed += aceleracao * Time.deltaTime;
         }
-
 
         // Se carregar na seta Direita ou no 'D'
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
@@ -79,6 +91,7 @@ public class PlayerMovement : MonoBehaviour
         if (Physics.Raycast(transform.position, Vector3.down, 1.1f))
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            anim.SetTrigger("Saltar");
         }
     }
 
@@ -95,31 +108,68 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void Morrer()
-{
-    if (estaMorto) return;
-    estaMorto = true;
+    {
+        if (estaMorto) return;
+        estaMorto = true;
+        anim.SetTrigger("Morrer");
+        // 1. Parar o movimento
+        speed = 0f;
+        aceleracao = 0f;
+        enabled = false; 
+        rb.linearVelocity = Vector3.zero; 
+        rb.AddForce(Vector3.down * 50f, ForceMode.Impulse);
 
-    // 1. Parar o movimento
-    speed = 0f;
-    aceleracao = 0f;
-    enabled = false; 
-    rb.linearVelocity = Vector3.zero; 
-    rb.AddForce(Vector3.down * 50f, ForceMode.Impulse);
+        // 2. RECOLHER OS DADOS REAIS
+        // Calculamos a distância percorrida (Z) e arredondamos para um número inteiro
+        int finalDistance = Mathf.FloorToInt(transform.position.z);
 
-    // 2. RECOLHER OS DADOS REAIS
-    // Calculamos a distância percorrida (Z) e arredondamos para um número inteiro
-    int finalDistance = Mathf.FloorToInt(transform.position.z);
+        // Vamos buscar o ScoreManager que está na cena para saber as moedas
+        int finalCoins = 0;
+        ScoreManager sm = FindObjectOfType<ScoreManager>();
+        if (sm != null) {
+            finalCoins = sm.totalMoedas;
+        }
 
-    // Vamos buscar o ScoreManager que está na cena para saber as moedas
-    int finalCoins = 0;
-    ScoreManager sm = FindObjectOfType<ScoreManager>();
-    if (sm != null) {
-        finalCoins = sm.totalMoedas;
+        // 3. ENVIAR PARA O MENU
+        FindObjectOfType<MenuManager>().ShowGameOver(finalDistance, finalCoins);
+
+        Debug.Log("GAME OVER! Distância: " + finalDistance + " Moedas: " + finalCoins);
+    }
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (estaMorto) return;
+
+        // Se batermos na Estrela
+        if (other.gameObject.CompareTag("Estrela"))
+        {
+            Destroy(other.gameObject); // A estrela desaparece
+            
+            // 2. Se já houver um boost a decorrer, CANCELA esse cronómetro!
+            if (rotinaDeBoostAtual != null)
+            {
+                StopCoroutine(rotinaDeBoostAtual);
+            }
+            
+            // 3. Começa um novo cronómetro (reiniciando os 5 segundos)
+            rotinaDeBoostAtual = StartCoroutine(PoderDeVelocidade());
+        }
     }
 
-    // 3. ENVIAR PARA O MENU
-    FindObjectOfType<MenuManager>().ShowGameOver(finalDistance, finalCoins);
+    IEnumerator PoderDeVelocidade()
+    {
+        // 4. Em vez de multiplicar a velocidade atual, usamos sempre a base
+        // Assim, mesmo que apanhes 10 estrelas seguidas, a velocidade nunca passa deste limite.
+        speed = velocidadeBase * velocidadeExtra;   
+        
+        yield return new WaitForSeconds(tempoDoPoder); // Espera o tempo
+        
+        if (!estaMorto) 
+        {
+            speed = velocidadeBase; // Volta ao normal de forma 100% segura
+        }
 
-    Debug.Log("GAME OVER! Distância: " + finalDistance + " Moedas: " + finalCoins);
-}
+        // Limpa a memória de que o boost estava ativo
+        rotinaDeBoostAtual = null; 
+    }
 }
