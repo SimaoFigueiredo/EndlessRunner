@@ -83,6 +83,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bbd4f9e3d20452641a179a15cfcc5ba5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3214433181962559183}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bbd4f9e3d20452641a179a15cfcc5ba5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4296112515967224513}
   m_SourcePrefab: {fileID: 100100000, guid: bbd4f9e3d20452641a179a15cfcc5ba5, type: 3}
 --- !u!1 &7331960070785106472 stripped
 GameObject:
@@ -110,3 +113,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.19502664, y: 0.20506312, z: 0.0740667}
   m_Center: {x: -0.010294747, y: 0.000000007450581, z: 0.011881176}
+--- !u!114 &4296112515967224513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7331960070785106472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83bd2a545d430fc419a84212778e605d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Rotator
+  velocidadeRotacao: {x: 0, y: 90, z: 0}
+  amplitudeFlutuacao: 0.2
+  velocidadeFlutuacao: 1

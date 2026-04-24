@@ -611,8 +611,9 @@ MonoBehaviour:
   - {fileID: 6290898208008252520}
   - {fileID: 6038972362125512421}
   estrelaPrefab: {fileID: 7331960070785106472, guid: b6ce24362c3abaf44bd7dc53fceb0a20, type: 3}
-  chanceDeEstrela: 100
+  chanceDeEstrela: 25
   podeCriarMoedas: 1
+  alturaBaseMoedas: 0
 --- !u!1001 &2216949996077325
 PrefabInstance:
   m_ObjectHideFlags: 0

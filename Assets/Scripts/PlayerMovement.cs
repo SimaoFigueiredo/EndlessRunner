@@ -3,11 +3,14 @@ using UnityEngine;
 using System.Collections; // <-- Adicionado apenas isto aqui em cima para o cronómetro funcionar
 
 public class PlayerMovement : MonoBehaviour
-{   
+{  
     [Header("Poder da Estrela")]
     public float velocidadeExtra = 2f; // Multiplica a velocidade por 2
     public float tempoDoPoder = 5f;    // O turbo dura 5 segundos
-    private float velocidadeOriginal;  // Guarda a velocidade normal para voltar ao que era
+    public float velocidadeBase = 10f; 
+
+    // A variável que impede as estrelas de se atropelarem
+    private Coroutine rotinaDeBoostAtual;
     
     [Header("Configurações de Velocidade")]
     public float speed = 10f;             // Velocidade inicial
@@ -132,33 +135,41 @@ public class PlayerMovement : MonoBehaviour
 
         Debug.Log("GAME OVER! Distância: " + finalDistance + " Moedas: " + finalCoins);
     }
-
-    // ==========================================================
-    // SÓ ADICIONADO ISTO AQUI EM BAIXO PARA A ESTRELA FUNCIONAR:
-    // ==========================================================
     
     private void OnTriggerEnter(Collider other)
     {
         if (estaMorto) return;
 
-        // Se batermos na Estrela...
+        // Se batermos na Estrela
         if (other.gameObject.CompareTag("Estrela"))
         {
             Destroy(other.gameObject); // A estrela desaparece
-            StartCoroutine(PoderDeVelocidade()); // Ativa o turbo!
+            
+            // 2. Se já houver um boost a decorrer, CANCELA esse cronómetro!
+            if (rotinaDeBoostAtual != null)
+            {
+                StopCoroutine(rotinaDeBoostAtual);
+            }
+            
+            // 3. Começa um novo cronómetro (reiniciando os 5 segundos)
+            rotinaDeBoostAtual = StartCoroutine(PoderDeVelocidade());
         }
     }
 
     IEnumerator PoderDeVelocidade()
     {
-        velocidadeOriginal = speed; // Guarda a velocidade atual
-        speed *= velocidadeExtra;   // Acelera!
+        // 4. Em vez de multiplicar a velocidade atual, usamos sempre a base
+        // Assim, mesmo que apanhes 10 estrelas seguidas, a velocidade nunca passa deste limite.
+        speed = velocidadeBase * velocidadeExtra;   
         
-        yield return new WaitForSeconds(tempoDoPoder); // Espera 5 segundos
+        yield return new WaitForSeconds(tempoDoPoder); // Espera o tempo
         
         if (!estaMorto) 
         {
-            speed = velocidadeOriginal; // Volta ao normal
+            speed = velocidadeBase; // Volta ao normal de forma 100% segura
         }
+
+        // Limpa a memória de que o boost estava ativo
+        rotinaDeBoostAtual = null; 
     }
 }
