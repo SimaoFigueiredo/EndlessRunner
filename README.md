@@ -64,7 +64,7 @@ O jogo desenvolvido enquadra-se no tema "Endless Runner". O jogador controla uma
 * **Formatos:** Texturas em **.png** e **.jpg** (512px/1024px) para reduzir o consumo de memória de vídeo (VRAM).
 
 **Áudio (SFX e Música):**
-* **Formatos:** Efeitos sonoros rápidos em **.wav** (sem compressão para resposta imediata) e música ambiente em **.mp3** (alta compressão para reduzir o tamanho do ficheiro final).
+* **Formatos:** Efeitos sonoros rápidos e música ambiente em **.mp3** (alta compressão para reduzir o tamanho do ficheiro final).
 
 ---
 
