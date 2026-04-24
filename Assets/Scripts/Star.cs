@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Rotator : MonoBehaviour
+public class Star : MonoBehaviour
 {
     [Header("Configurações de Movimento")]
     public Vector3 velocidadeRotacao = new Vector3(0f, 90f, 0f); // Rotação no eixo Y (padrão)

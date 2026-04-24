@@ -85,7 +85,7 @@ PrefabInstance:
       addedObject: {fileID: 3214433181962559183}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bbd4f9e3d20452641a179a15cfcc5ba5, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4296112515967224513}
+      addedObject: {fileID: 4356140344174490416}
   m_SourcePrefab: {fileID: 100100000, guid: bbd4f9e3d20452641a179a15cfcc5ba5, type: 3}
 --- !u!1 &7331960070785106472 stripped
 GameObject:
@@ -113,7 +113,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.19502664, y: 0.20506312, z: 0.0740667}
   m_Center: {x: -0.010294747, y: 0.000000007450581, z: 0.011881176}
---- !u!114 &4296112515967224513
+--- !u!114 &4356140344174490416
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -122,9 +122,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7331960070785106472}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83bd2a545d430fc419a84212778e605d, type: 3}
+  m_Script: {fileID: 11500000, guid: cce467f96592a4649a94c63ea1e2a64c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Rotator
+  m_EditorClassIdentifier: Assembly-CSharp::Star
   velocidadeRotacao: {x: 0, y: 90, z: 0}
   amplitudeFlutuacao: 0.2
   velocidadeFlutuacao: 1
