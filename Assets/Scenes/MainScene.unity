@@ -367,6 +367,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 229fab40e4ace4d469b10a6376bffa26, type: 3}
+--- !u!95 &304588455 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5712809515154198594, guid: 229fab40e4ace4d469b10a6376bffa26, type: 3}
+  m_PrefabInstance: {fileID: 304588454}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &349490485
 GameObject:
   m_ObjectHideFlags: 0
@@ -678,11 +683,6 @@ MonoBehaviour:
 --- !u!4 &449646246 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1848680544016075320, guid: 229fab40e4ace4d469b10a6376bffa26, type: 3}
-  m_PrefabInstance: {fileID: 304588454}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &449646247 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5712809515154198594, guid: 229fab40e4ace4d469b10a6376bffa26, type: 3}
   m_PrefabInstance: {fileID: 304588454}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &635943506
@@ -2403,6 +2403,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   velocidadeExtra: 2
   tempoDoPoder: 5
+  velocidadeBase: 10
   speed: 10
   aceleracao: 0.2
   velocidadeMaxima: 65
@@ -2410,7 +2411,7 @@ MonoBehaviour:
   laneDistance: 3
   jumpForce: 11
   gravidadeExtra: 20
-  anim: {fileID: 449646247}
+  anim: {fileID: 304588455}
 --- !u!54 &1713883707
 Rigidbody:
   m_ObjectHideFlags: 0

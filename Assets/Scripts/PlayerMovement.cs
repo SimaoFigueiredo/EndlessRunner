@@ -28,6 +28,15 @@ public class PlayerMovement : MonoBehaviour
     [Header("Animações")]
     public Animator anim;
 
+
+    void Start()
+{
+    // Mal o boneco nasce (incluindo no Restart), ele manda calar o menu e tocar o jogo!
+    if (AudioManager.instance != null)
+    {
+        AudioManager.instance.MudarParaMusicaJogo();
+    }
+}
     void Update()
     {
         if (speed < velocidadeMaxima)
@@ -92,6 +101,7 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             anim.SetTrigger("Saltar");
+            AudioManager.instance.PlaySFX(AudioManager.instance.somSalto);
         }
     }
 
@@ -111,7 +121,15 @@ public class PlayerMovement : MonoBehaviour
     {
         if (estaMorto) return;
         estaMorto = true;
+
+        // --- NOVO: TOCA O SOM DE MORTE/IMPACTO ---
+        if (AudioManager.instance != null) 
+        {
+            AudioManager.instance.PlaySFX(AudioManager.instance.somMorte);
+        }
+
         anim.SetTrigger("Morrer");
+        
         // 1. Parar o movimento
         speed = 0f;
         aceleracao = 0f;
@@ -120,10 +138,8 @@ public class PlayerMovement : MonoBehaviour
         rb.AddForce(Vector3.down * 50f, ForceMode.Impulse);
 
         // 2. RECOLHER OS DADOS REAIS
-        // Calculamos a distância percorrida (Z) e arredondamos para um número inteiro
         int finalDistance = Mathf.FloorToInt(transform.position.z);
 
-        // Vamos buscar o ScoreManager que está na cena para saber as moedas
         int finalCoins = 0;
         ScoreManager sm = FindObjectOfType<ScoreManager>();
         if (sm != null) {
@@ -133,6 +149,13 @@ public class PlayerMovement : MonoBehaviour
         // 3. ENVIAR PARA O MENU
         FindObjectOfType<MenuManager>().ShowGameOver(finalDistance, finalCoins);
 
+        // 4. TROCAR A MÚSICA PARA A DO MENU
+        if (AudioManager.instance != null) 
+        {
+            AudioManager.instance.musicaJogo.Stop(); 
+            AudioManager.instance.MudarParaMusicaMenu();
+        }
+
         Debug.Log("GAME OVER! Distância: " + finalDistance + " Moedas: " + finalCoins);
     }
     
@@ -140,19 +163,38 @@ public class PlayerMovement : MonoBehaviour
     {
         if (estaMorto) return;
 
-        // Se batermos na Estrela
+        // --- LÓGICA DA ESTRELA ---
         if (other.gameObject.CompareTag("Estrela"))
         {
-            Destroy(other.gameObject); // A estrela desaparece
+            // TOCA O SOM DA ESTRELA!
+            if (AudioManager.instance != null) 
+                AudioManager.instance.PlaySFX(AudioManager.instance.somEstrela);
+
+            Destroy(other.gameObject); 
             
-            // 2. Se já houver um boost a decorrer, CANCELA esse cronómetro!
             if (rotinaDeBoostAtual != null)
             {
                 StopCoroutine(rotinaDeBoostAtual);
             }
             
-            // 3. Começa um novo cronómetro (reiniciando os 5 segundos)
             rotinaDeBoostAtual = StartCoroutine(PoderDeVelocidade());
+        }
+
+        // --- LÓGICA DA MOEDA ---
+        if (other.gameObject.CompareTag("Moeda"))
+        {
+            // TOCA O SOM DA MOEDA!
+            if (AudioManager.instance != null) 
+                AudioManager.instance.PlaySFX(AudioManager.instance.somMoeda);
+
+            // 1. Destruir a moeda para ela não ficar no caminho
+            Destroy(other.gameObject); 
+
+            // 2. Aqui é onde normalmente somas os pontos (se tiveres o ScoreManager)
+            ScoreManager sm = FindObjectOfType<ScoreManager>();
+            if (sm != null) {
+                sm.totalMoedas++; // Ou a tua função de adicionar moedas
+            }
         }
     }
 
